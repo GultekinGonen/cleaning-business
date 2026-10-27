@@ -112,25 +112,26 @@ async function LocalizedHome({
       </header>
 
       {/* Hero section. */}
-      <section className="hero">
-        <p className="eyebrow">{t.hero.title.toUpperCase()}</p>
+      {/* Main homepage hero section. */}
+<section className="hero">
+  <div className="hero-content">
+    {/* Main headline, translated according to the selected language. */}
+    <h1>{t.hero.title}</h1>
 
-        <h1>{t.hero.title}</h1>
+    {/* Short explanation of our cleaning services. */}
+    <p>{t.hero.description}</p>
 
-        <p className="hero-description">{t.hero.description}</p>
+    {/* Primary action: request a quote. */}
+    <a className="hero-cta" href="#contact">
+      {t.hero.cta}
+    </a>
 
-        <a href="#contact" className="primary-button">
-          {t.hero.cta} ↗
-        </a>
-
-        <p className="hero-note">
-          {locale === "fr"
-            ? "Service professionnel · Devis sans engagement"
-            : locale === "nl"
-              ? "Professionele service · Vrijblijvende offerte"
-              : "Professional service · No-obligation quote"}
-        </p>
-      </section>
+    {/* Secondary action: discover the available services. */}
+    <a className="hero-secondary" href="#services">
+      {t.services.title} →
+    </a>
+  </div>
+</section>
 
       {/* Services section. */}
       <section id="services" className="services">

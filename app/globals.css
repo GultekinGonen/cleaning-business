@@ -900,3 +900,76 @@ header {
     transform: none;
   }
 }
+/* Give the homepage hero section generous spacing. */
+.hero {
+  padding: 88px 24px;
+  background: linear-gradient(135deg, #f8f9f6 0%, #edf3ec 100%);
+}
+
+/* Keep the hero text readable on wide screens. */
+.hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Make the main headline the strongest visual element. */
+.hero-content h1 {
+  max-width: 800px;
+  margin: 0 auto 24px;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+}
+
+/* Make the description comfortable to read. */
+.hero-content p {
+  max-width: 680px;
+  margin: 0 auto 32px;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+/* Make the quote link look like a clear primary button. */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 26px;
+  margin: 0 8px 12px;
+  border-radius: 8px;
+  background: var(--green);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Provide feedback when visitors hover over the primary action. */
+.hero-cta:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+}
+/* Style the services link as a secondary outlined button. */
+.hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 26px;
+  margin: 0 8px 12px;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Add a subtle green background when visitors hover over it. */
+.hero-secondary:hover {
+  background: var(--green);
+  color: #ffffff;
+}
