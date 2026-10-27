@@ -115,7 +115,7 @@ export default function ContactForm() {
             {/* Let the customer choose the cleaning service they need. */}
             <div className="form-field">
                 {/* Display the question above the dropdown. */}
-                <label htmlFor="service">Quel service souhaitez-vous ?</label>
+                <label htmlFor="service">Quel service souhaitez-vous ?</label>  
 
                 {/* The selected value is sent to the contact API as "service". */}
                 <select id="service" name="service" required defaultValue="">

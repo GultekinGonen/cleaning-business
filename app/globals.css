@@ -747,3 +747,60 @@ header {
   }
 }
 
+/* Arrange the language links horizontally in the header. */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+/* Match the language links to the website's existing typography. */
+.language-switcher a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.75;
+}
+
+/* Highlight the language currently selected. */
+.language-switcher a[aria-current="page"] {
+  opacity: 1;
+  font-weight: 700;
+}
+
+/* Make the selector slightly smaller on mobile screens. */
+@media (max-width: 650px) {
+  .language-switcher {
+    font-size: 0.8rem;
+  }
+}
+/* Keep the language links together in the header. */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Make language links match the website's existing design. */
+.language-switcher a {
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* Highlight the language currently being viewed. */
+.language-switcher a[aria-current="page"] {
+  opacity: 1;
+  font-weight: 700;
+}
+
+/* Keep the language selector visible on smaller screens. */
+@media (max-width: 650px) {
+  .language-switcher {
+    font-size: 0.8rem;
+  }
+}
+
