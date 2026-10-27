@@ -217,8 +217,8 @@ async function LocalizedHome({
         <h2>{t.contact.title}</h2>
         <p>{t.contact.description}</p>
 
-        {/* We will pass the selected language to this form next. */}
-        <ContactForm />
+        {/* Display the contact form in the selected language. */}
+        <ContactForm locale={locale} />
 
         {/* Explain the purpose of data collection and link to the privacy notice. */}
         <p className="privacy-notice">

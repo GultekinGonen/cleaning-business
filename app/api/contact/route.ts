@@ -27,6 +27,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true });
     } 
     const name = String(body.name ?? "").trim();
+    const company = String(body.company ?? "").trim();
     const email = String(body.email ?? "").trim();
     const phone = String(body.phone ?? "").trim();
     const service = String(body.service ?? "").trim();
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
     if (
       !name ||
       name.length > 100 ||
+      company.length > 150 ||
       !email ||
       email.length > 254 ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
@@ -72,6 +74,7 @@ export async function POST(request: Request) {
       subject: `Cleaning quote request — ${name}`,
       text: [
         `Name: ${name}`,
+        `Company: ${company}`,
         `Email: ${email}`,
         `Phone: ${phone || "Not provided"}`,
         `Service: ${service}`,

@@ -1,175 +1,273 @@
+
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import type { Locale } from "./translations";
 
-export default function ContactForm() {
-    const [status, setStatus] = useState("");
-    const [isSending, setIsSending] = useState(false);
+// Keep the service values in English because the existing API expects them.
+const services = [
+  {
+    value: "Carpet cleaning",
+    fr: "Nettoyage de tapis et moquettes",
+    nl: "Tapijt- en vloerkleedreiniging",
+    en: "Carpet cleaning",
+  },
+  {
+    value: "Commercial cleaning",
+    fr: "Nettoyage professionnel",
+    nl: "Professionele schoonmaak",
+    en: "Commercial cleaning",
+  },
+  {
+    value: "Deep cleaning",
+    fr: "Nettoyage en profondeur",
+    nl: "Grondige schoonmaak",
+    en: "Deep cleaning",
+  },
+  {
+    value: "Window cleaning",
+    fr: "Nettoyage de vitres",
+    nl: "Ramen wassen",
+    en: "Window cleaning",
+  },
+] as const;
 
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
+// Translate all form text according to the selected language.
+const formText = {
+  fr: {
+    name: "Nom complet",
+    email: "Adresse e-mail",
+    phone: "Téléphone (facultatif)",
+    service: "Service souhaité",
+    choose: "Choisissez un service",
+    message: "Décrivez votre demande",
+    submit: "Envoyer ma demande",
+    sending: "Envoi en cours…",
+    success: "Votre demande a bien été envoyée.",
+    error: "L'envoi a échoué. Veuillez réessayer.",
+    privacy: "Vos données seront utilisées pour répondre à votre demande.",
+    privacyLink: "Lire notre politique de confidentialité",
+  },
+  nl: {
+    name: "Volledige naam",
+    email: "E-mailadres",
+    phone: "Telefoon (optioneel)",
+    service: "Gewenste dienst",
+    choose: "Kies een dienst",
+    message: "Beschrijf uw aanvraag",
+    submit: "Aanvraag verzenden",
+    sending: "Bezig met verzenden…",
+    success: "Uw aanvraag is succesvol verzonden.",
+    error: "Verzenden is mislukt. Probeer het opnieuw.",
+    privacy: "Uw gegevens worden gebruikt om uw aanvraag te beantwoorden.",
+    privacyLink: "Lees ons privacybeleid",
+  },
+  en: {
+    name: "Full name",
+    email: "Email address",
+    phone: "Phone (optional)",
+    service: "Service required",
+    choose: "Choose a service",
+    message: "Describe your request",
+    submit: "Send my request",
+    sending: "Sending…",
+    success: "Your request was sent successfully.",
+    error: "Sending failed. Please try again.",
+    privacy: "Your data will be used to respond to your request.",
+    privacyLink: "Read our privacy policy",
+  },
+} as const;
 
-        if (isSending) return;
+// Receive the language from the page URL: /fr, /nl, or /en.
+export default function ContactForm({ locale }: { locale: Locale }) {
+  const t = formText[locale];
 
-        setIsSending(true);
-        setStatus("Envoi de votre demande...");
+  // Store the current form values.
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState(""); // Optional company name.
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [service, setService] = useState("");
+  const [message, setMessage] = useState("");
 
-        const form = event.currentTarget;
-        const formData = new FormData(form);
+  // Track submission status and display feedback to the visitor.
+  const [isSending, setIsSending] = useState(false);
+  const [status, setStatus] = useState<"success" | "error" | null>(null);
 
-        const data = {
-            name: formData.get("name"),
-            email: formData.get("email"),
-            phone: formData.get("phone"),
-            service: formData.get("service"),
-            message: formData.get("message"),
-            website: formData.get("website"),
-        };
+  // Send the form to the existing Next.js API route.
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSending(true);
+    setStatus(null);
 
-        try {
-            const response = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          company, // Include the optional company name in the request.
+          email,
+          phone,
+          service,
+          message,
 
-            if (!response.ok) {
-                throw new Error("Impossible d'envoyer la demande.");
-            }
+          // Keep the hidden spam-trap field empty.
+          website: "",
+        }),
+      });
 
-            setStatus("Merci ! Votre demande a bien été envoyée.");
-            form.reset();
-        } catch {
-            setStatus(
-                "Votre demande n'a pas pu être envoyée. Veuillez réessayer plus tard."
-            );
-        } finally {
-            setIsSending(false);
-        }
+      if (!response.ok) {
+        throw new Error("The contact request failed.");
+      }
+
+      // Clear the form only after the API accepts the request.
+      setName("");
+      setCompany("");
+      setEmail("");
+      setPhone("");
+      setService("");
+      setMessage("");
+      setStatus("success");
+    } catch {
+      // Show an error without exposing technical details to visitors.
+      setStatus("error");
+    } finally {
+      setIsSending(false);
     }
+  }
 
-    return (
-        <form className="contact-form" onSubmit={handleSubmit}>
-            <div
-                aria-hidden="true"
-                style={{
-                    position: "absolute",
-                    width: "1px",
-                    height: "1px",
-                    padding: 0,
-                    margin: "-1px",
-                    overflow: "hidden",
-                    clip: "rect(0, 0, 0, 0)",
-                    whiteSpace: "nowrap",
-                    border: 0,
-                }}
-            >
-                <label htmlFor="website">Leave this field empty</label>
-                <input
-                    id="website"
-                    name="website"
-                    type="text"
-                    tabIndex={-1}
-                    autoComplete="off"
-                />
-            </div>
-            <div className="form-field">
-                <label htmlFor="name">Nom complet</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    maxLength={100}
-                    placeholder="Votre nom"
-                />
-            </div>
+  return (
+    <form className="contact-form" onSubmit={handleSubmit}>
+      {/* Full name */}
+      <div className="form-field">
+        <label htmlFor="contact-name">{t.name}</label>
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          autoComplete="name"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          required
+          maxLength={100}
+        />
+      </div>
+      {/* Optional company name for business customers. */}
+      <div className="form-field">
+        <label htmlFor="contact-company">
+          {locale === "fr"
+            ? "Nom de l’entreprise (facultatif)"
+            : locale === "nl"
+              ? "Bedrijfsnaam (optioneel)"
+              : "Company name (optional)"}
+        </label>
 
-            <div className="form-field">
-                <label htmlFor="email">Adresse e-mail</label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    maxLength={254}
-                    placeholder="vous@exemple.com"
-                />
-            </div>
+        <input
+          id="contact-company"
+          name="company"
+          type="text"
+          autoComplete="organization"
+          value={company}
+          onChange={(event) => setCompany(event.target.value)}
+          maxLength={150}
+          placeholder={
+            locale === "fr"
+              ? "Nom de votre entreprise"
+              : locale === "nl"
+                ? "Naam van uw bedrijf"
+                : "Your company name"
+          }
+        />
+      </div>
+      {/* Email address */}
+      <div className="form-field">
+        <label htmlFor="contact-email">{t.email}</label>
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+          maxLength={254}
+        />
+      </div>
 
-            <div className="form-field">
-                <label htmlFor="phone">Numéro de téléphone</label>
-                <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    autoComplete="tel"
-                    maxLength={30}
-                    placeholder="Votre numéro de téléphone"
-                />
-            </div>
+      {/* Optional phone number */}
+      <div className="form-field">
+        <label htmlFor="contact-phone">{t.phone}</label>
+        <input
+          id="contact-phone"
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          value={phone}
+          onChange={(event) => setPhone(event.target.value)}
+          maxLength={30}
+        />
+      </div>
 
-            ```tsx
-            {/* Let the customer choose the cleaning service they need. */}
-            <div className="form-field">
-                {/* Display the question above the dropdown. */}
-                <label htmlFor="service">Quel service souhaitez-vous ?</label>  
+      {/* The displayed labels change, but the submitted values do not. */}
+      <div className="form-field">
+        <label htmlFor="contact-service">{t.service}</label>
+        <select
+          id="contact-service"
+          name="service"
+          value={service}
+          onChange={(event) => setService(event.target.value)}
+          required
+        >
+          <option value="">{t.choose}</option>
 
-                {/* The selected value is sent to the contact API as "service". */}
-                <select id="service" name="service" required defaultValue="">
-                    {/* Require the customer to choose a service. */}
-                    <option value="" disabled>
-                        Choisissez un service
-                    </option>
+          {services.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item[locale]}
+            </option>
+          ))}
+        </select>
+      </div>
 
-                    {/* Carpet cleaning replaces residential cleaning. */}
-                    <option value="Carpet cleaning">
-                        Nettoyage de tapis et moquettes
-                    </option>
+      {/* Details of the requested cleaning service */}
+      <div className="form-field">
+        <label htmlFor="contact-message">{t.message}</label>
+        <textarea
+          id="contact-message"
+          name="message"
+          rows={5}
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          required
+          maxLength={5000}
+        />
+      </div>
 
-                    {/* Keep commercial cleaning. */}
-                    <option value="Commercial cleaning">
-                        Bureaux et locaux professionnels
-                    </option>
+      {/* Privacy information and link */}
+      <p className="privacy-note">
+        {t.privacy}{" "}
+        <a href={`/${locale}/privacy`}>{t.privacyLink}</a>
+      </p>
 
-                    {/* Keep deep cleaning. */}
-                    <option value="Deep cleaning">
-                        Nettoyage en profondeur
-                    </option>
+    {/* Prominent green button for submitting the contact request. */}
+    <button
+        type="submit"
+        className="primary-button"
+        disabled={isSending}
+        >
+        {isSending ? t.sending : t.submit}
+    </button>
 
-                    {/* Add window cleaning as a new service. */}
-                    <option value="Window cleaning">
-                        Nettoyage de vitres
-                    </option>
-                </select>
-            </div>
-            ```
+      {/* Announce submission results accessibly */}
+      {status === "success" && (
+        <p role="status">{t.success}</p>
+      )}
 
-            <div className="form-field">
-                <label htmlFor="message">Décrivez votre projet</label>
-                <textarea
-                    id="message"
-                    name="message"
-                    required
-                    maxLength={3000}
-                    rows={5}
-                    placeholder="Décrivez le bien et le nettoyage souhaité..."
-                />
-            </div>
-
-            <button
-                type="submit"
-                className="primary-button"
-                disabled={isSending}
-            >
-                {isSending ? "Envoi en cours..." : "Demander un devis gratuit ↗"}
-            </button>
-
-            <p className="form-status" role="status" aria-live="polite">
-                {status}
-            </p>
-        </form>
-    );
+      {status === "error" && (
+        <p role="alert">{t.error}</p>
+      )}
+    </form>
+  );
 }
