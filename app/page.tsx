@@ -5,7 +5,7 @@ export default function Home() {
     <main>
       <header>
         <a href="/" className="logo">
-          Clean<span>Space</span>
+          T.A.<span>Cleaning</span>
         </a>
 
         <nav>
