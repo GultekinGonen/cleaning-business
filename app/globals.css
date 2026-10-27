@@ -320,3 +320,430 @@ footer p {
   color: var(--green);
   font-size: 0.92rem;
 }
+
+/* Keep the service cards aligned and evenly spaced. */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+/* Give each service card a clean, professional appearance. */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px;
+  background-color: #ffffff;
+  border: 1px solid #e5eae5;
+  border-radius: 16px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Add a subtle effect when visitors hover over a card. */
+.service-card:hover {
+  transform: translateY(-4px);
+  border-color: #a5c9ad;
+  box-shadow: 0 12px 28px rgba(20, 60, 35, 0.08);
+}
+
+/* Style the service number as a small green accent. */
+.service-card > span {
+  margin-bottom: 18px;
+  color: #287a45;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Keep service titles readable and consistent. */
+.service-card h3 {
+  margin: 0 0 12px;
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+/* Make the descriptions comfortable to read. */
+.service-card p {
+  margin: 0 0 24px;
+  color: #626b64;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Push the quote link toward the bottom of every card. */
+.service-card .service-link {
+  margin-top: auto;
+  color: #287a45;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Underline the quote link when visitors hover over it. */
+.service-card .service-link:hover {
+  text-decoration: underline;
+}
+
+/* Display one card per row on smaller screens. */
+@media (max-width: 650px) {
+  .service-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Reduce padding to make better use of mobile screen space. */
+  .service-card {
+    padding: 22px;
+  }
+}
+
+/* Respect visitors who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .service-card {
+    transition: none;
+  }
+
+  .service-card:hover {
+    transform: none;
+  }
+}
+
+/* Keep padding and borders inside each element's declared width. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Prevent long content from creating horizontal scrolling. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
+}
+
+body {
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+/* Make images and other media fit within their containers. */
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+/* Keep the header elements aligned without overflowing. */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Keep the desktop navigation links neatly spaced. */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Hide the mobile dropdown on larger screens. */
+.mobile-menu {
+  display: none;
+}
+
+/* Make quote links and buttons comfortable to tap. */
+.header-button,
+.primary-button,
+.service-link,
+.mobile-quote-link {
+  min-height: 44px;
+}
+
+/* Prevent the main sections from becoming excessively wide. */
+.hero,
+.services,
+.about,
+.contact {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Improve heading readability on medium-sized screens. */
+@media (max-width: 900px) {
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 54px);
+    line-height: 1.15;
+  }
+
+  .services,
+  .about,
+  .contact {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  header {
+    gap: 16px;
+  }
+
+  .desktop-nav {
+    gap: 16px;
+  }
+}
+
+/* Switch to the collapsible navigation on phones and small tablets. */
+@media (max-width: 650px) {
+  header {
+    position: relative;
+    gap: 12px;
+    padding: 16px 20px;
+  }
+
+  /* Keep the logo visible on the left. */
+  header > .logo {
+    margin-right: auto;
+  }
+
+  /* Hide the desktop links and desktop quote button. */
+  .desktop-nav,
+  header > .header-button {
+    display: none;
+  }
+
+  /* Show the mobile menu trigger. */
+  .mobile-menu {
+    display: block;
+    position: relative;
+  }
+
+  /* Style the clickable menu label. */
+  .mobile-menu summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #dce5dc;
+    border-radius: 8px;
+    color: #245f36;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  /* Hide the default disclosure marker in WebKit browsers. */
+  .mobile-menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Display the navigation as a dropdown below the menu trigger. */
+  .mobile-menu nav {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: min(260px, calc(100vw - 40px));
+    padding: 12px;
+    border: 1px solid #e1e8e1;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(20, 60, 35, 0.12);
+  }
+
+  /* Make each navigation link easy to tap. */
+  .mobile-menu nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: #243629;
+    text-decoration: none;
+  }
+
+  /* Add a subtle hover effect to dropdown links. */
+  .mobile-menu nav a:hover {
+    background: #f0f6f0;
+  }
+
+  /* Highlight the quote link as the main mobile action. */
+  .mobile-menu nav .mobile-quote-link {
+    justify-content: center;
+    margin-top: 4px;
+    background: #287a45;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Reduce hero spacing and typography on narrow screens. */
+  .hero {
+    padding: 56px 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 9vw, 44px);
+    line-height: 1.12;
+  }
+
+  .hero-description {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* Make the main call-to-action easy to tap. */
+  .primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    padding: 12px 18px;
+    text-align: center;
+  }
+
+  /* Use consistent horizontal spacing for the main sections. */
+  .services,
+  .about,
+  .contact {
+    padding: 48px 20px;
+  }
+
+  /* Avoid oversized section headings on mobile. */
+  .services h2,
+  .about h2,
+  .contact h2 {
+    font-size: clamp(26px, 7vw, 34px);
+    line-height: 1.25;
+  }
+
+  /* Prevent long form fields from extending beyond the screen. */
+  .contact input,
+  .contact select,
+  .contact textarea,
+  .contact button {
+    max-width: 100%;
+  }
+
+  /* Keep the footer tidy on small screens. */
+  footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px 20px;
+  }
+}
+
+/* Disable smooth scrolling for visitors who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Arrange the footer content into three columns on larger screens. */
+.site-footer {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 1fr;
+  gap: 40px;
+  padding: 48px max(24px, calc((100% - 1100px) / 2));
+  background: #f5f8f5;
+  color: #243629;
+}
+
+/* Keep footer content from overflowing its grid column. */
+.footer-brand,
+.footer-links,
+.footer-contact {
+  min-width: 0;
+}
+
+/* Make the footer description comfortable to read. */
+.footer-brand p,
+.footer-contact p {
+  max-width: 340px;
+  color: #626b64;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Style footer section headings. */
+.site-footer h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+/* Stack navigation links vertically. */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.footer-links a {
+  color: #46554a;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* Underline footer links on hover. */
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* Style the footer's quote-request link. */
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #287a45;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Add a subtle hover effect to the quote button. */
+.footer-cta:hover {
+  background: #205f36;
+}
+
+/* Place the copyright notice across the full footer width. */
+.footer-bottom {
+  grid-column: 1 / -1;
+  padding-top: 20px;
+  border-top: 1px solid #dfe7df;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: #68736b;
+  font-size: 13px;
+}
+
+/* Stack the footer columns on mobile screens. */
+@media (max-width: 650px) {
+  .site-footer {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 36px 20px 24px;
+  }
+
+  .footer-bottom {
+    grid-column: auto;
+  }
+}
+
